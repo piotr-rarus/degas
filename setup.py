@@ -21,5 +21,12 @@ setuptools.setup(
         ]
     ),
     install_requires=[
+        'numpy'
     ],
+    tests_require=[
+        'austen',
+        'scikit-image',
+        'pytest'
+    ]
+
 )

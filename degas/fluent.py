@@ -1,7 +1,7 @@
 from austen import Logger
 
 
-class FluentImage():
+class FluentNumpy():
     """
     Fluent interface support for image functions from cv2/skimage/etc.
     Enables method chaining. Assumes that these operators are
@@ -44,8 +44,7 @@ class FluentImage():
         return self
 
     def __exit__(self, type, value, traceback):
-        if self.logger:
-            self.logger.close()
+        pass
 
     def __rshift__(self, op):
         """
@@ -60,8 +59,8 @@ class FluentImage():
 
         Returns
         -------
-        FluentImage
-            Current instance of FluentImage. Internal image will be
+        FluentNumpy
+            Current instance of FluentNumpy. Internal image will be
             substituted with function call result.
         """
 

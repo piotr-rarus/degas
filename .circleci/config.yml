@@ -7,7 +7,7 @@ jobs:
     docker:
 
       - image: circleci/python:3.7.3
-    working_directory: ~/austen
+    working_directory: ~/degas
 
     steps:
 
@@ -33,7 +33,7 @@ jobs:
           name: Linter
           command: |
             . env/bin/activate
-            python -m flake8 ./austen/
+            python -m flake8 ./degas/
 
       - run:
           name: Tests
@@ -46,7 +46,7 @@ jobs:
           name: Coverage
           command: |
             . env/bin/activate
-            python -m pytest --cov=austen ./tests/
+            python -m pytest --cov=degas ./tests/
 
       - store_test_results:
           path: test-reports
@@ -59,7 +59,7 @@ jobs:
     docker:
       - image: circleci/python:3.7.3
 
-    working_directory: ~/austen
+    working_directory: ~/degas
 
     steps:
 

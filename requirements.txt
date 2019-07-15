@@ -1,3 +1,6 @@
+
 numpy
+austen
 scikit-image
-joblib
+flake8
+pytest

@@ -1,32 +1,34 @@
 import numpy as np
 from austen import Logger
 from skimage.color import rgb2gray
+from skimage.feature import canny
+from skimage import morphology
 from skimage.io import imread
+from pathlib import Path
 
-from degas import FluentImage
-from degas.color import white_balance
-from degas.exposure import dclahe
+from degas import FluentNumpy
 
-IMAGE_PATH = './tests/data/chelsea.png'
-LOGS_DIR = './logs/test_fluent/'
+IMAGE = Path('./tests/data/chelsea.png')
+LOGS = Path('./logs/')
 
 
 def test_fluent():
-    src = imread(IMAGE_PATH)
+    src = imread(str(IMAGE))
 
-    with Logger(LOGS_DIR) as logger:
-        with FluentImage(src, logger) as src_fluent:
+    logs_dir = LOGS.joinpath(test_fluent.__name__)
+
+    with Logger(logs_dir) as logger:
+        with FluentNumpy(src, logger) as src_fluent:
 
             src_fluent >> (
-                white_balance.simple,
-                {
-                    'f': .01,
-                    'cut_off': .01
-                }
-            ) >> (
                 rgb2gray
             ) >> (
-                dclahe
+                canny,
+                {
+                    'sigma': 3.0
+                }
+            ) >> (
+                morphology.binary_dilation
             )
 
             assert src_fluent.image.shape == src.shape[:-1]
@@ -34,21 +36,21 @@ def test_fluent():
 
 
 def test_fluent_2():
-    src = imread(IMAGE_PATH)
+    src = imread(str(IMAGE))
 
-    with Logger(LOGS_DIR) as logger:
-        with FluentImage(src, logger, inter_save=False) as src_fluent:
+    logs_dir = LOGS.joinpath(test_fluent_2.__name__)
 
+    with Logger(logs_dir) as logger:
+        with FluentNumpy(src, logger, inter_save=False) as src_fluent:
             src_fluent >> (
-                white_balance.simple,
-                {
-                    'f': .01,
-                    'cut_off': .01
-                }
-            ) >> (
                 rgb2gray
             ) >> (
-                dclahe
+                canny,
+                {
+                    'sigma': 3.0
+                }
+            ) >> (
+                morphology.binary_dilation
             )
 
             assert src_fluent.image.shape == src.shape[:-1]
@@ -56,20 +58,19 @@ def test_fluent_2():
 
 
 def test_fluent_3():
-    src = imread(IMAGE_PATH)
+    src = imread(str(IMAGE))
 
-    with FluentImage(src) as src_fluent:
+    with FluentNumpy(src) as src_fluent:
         src_fluent >> (
-            white_balance.simple,
-            {
-                'f': .01,
-                'cut_off': .01
-            }
-        ) >> (
-            rgb2gray
-        ) >> (
-            dclahe
-        )
+                rgb2gray
+            ) >> (
+                canny,
+                {
+                    'sigma': 3.0
+                }
+            ) >> (
+                morphology.binary_dilation
+            )
 
         assert src_fluent.image.shape == src.shape[:-1]
         assert not np.all(src_fluent.image == 0)

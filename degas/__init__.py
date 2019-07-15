@@ -1,1 +1,1 @@
-from .fluent import FluentImage
+from .fluent import FluentNumpy
