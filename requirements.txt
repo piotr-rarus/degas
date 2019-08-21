@@ -1,6 +1,7 @@
-
 numpy
 austen
 scikit-image
-flake8
 pytest
+pytest-cov
+flake8
+pylint
