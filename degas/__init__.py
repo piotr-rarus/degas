@@ -1,1 +1,2 @@
-from .fluent import FluentImage
+# flake8: noqa
+from .fluent import FluentNumpy
