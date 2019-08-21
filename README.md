@@ -15,6 +15,7 @@ Let's consider function like this (please keep in mind that images are quite hea
 ```py
 from skimage.color import rgb2gray
 from skimage.exposure import equalize_adapthist
+from skimage.feature import canny
 from skimage.transform import rescale
 
 
@@ -23,17 +24,18 @@ def preprocess(src, scale_factor):
     gray = rgb2gray(src)
     downscaled = rescale(gray, scale_factor)
     equalized = equalize_adapthist(downscaled, clip_limit=0.2)
+    edges = canny(equalized, sigma=2.0)
 
-    return equalized
+    return edges
 ```
 
-In this function we create 3 objects, each with unique reference label:
+In this function we create 4 objects, each with unique reference label:
 
 - gray
 - downscaled
 - equalized
 
-While the interpreter enters `preprocess` scope, by the end of the function, all of these 3 objects live in memory, because their reference count is 1. Our memory consumption grows linear with each image operation. Considering images that can be even over 100MP, this is simply an overkill. How to manage that?
+While the interpreter enters `preprocess` scope, by the end of the function, all of these 4 objects live in memory, because their reference count is 1. Our memory consumption grows linear with each image operation. Considering images that can be even over 100MP, this is simply an overkill. How to manage that?
 
 We introduce simple wrapper for an image `FluentImage`, that'll help us chain subsequent methods.
 
@@ -47,6 +49,7 @@ As we can't simply define new operator for python, we are overloading existing `
 from degas import FluentNumpy
 from skimage.color import rgb2gray
 from skimage.exposure import equalize_adapthist
+from skimage.feature import canny
 from skimage.transform import rescale
 
 
@@ -63,6 +66,11 @@ def preprocess(src, scale_factor):
             equalize_adapthist,
             {
                 'clip_limit': 0.2
+            }
+        ) >> (
+            canny,
+            {
+                'sigma': 2.0
             }
         )
 

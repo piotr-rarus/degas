@@ -16,8 +16,9 @@ setuptools.setup(
     url='http://msol-git:3000/ai-tools/degas',
     packages=setuptools.find_packages(
         exclude=[
-            "tests",
-            "examples"
+            'test',
+            'data',
+            'example'
         ]
     ),
     install_requires=[
