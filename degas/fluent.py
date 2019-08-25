@@ -1,7 +1,7 @@
 from austen import Logger
 
 
-class FluentNumpy():
+class FluentImage():
     """
     Fluent interface support for image functions from cv2/skimage/etc.
     Enables method chaining. Assumes that these operators are
@@ -59,8 +59,8 @@ class FluentNumpy():
 
         Returns
         -------
-        FluentNumpy
-            Current instance of FluentNumpy. Internal image will be
+        FluentImage
+            Current instance of FluentImage. Internal image will be
             substituted with function call result.
         """
 

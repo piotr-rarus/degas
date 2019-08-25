@@ -1,27 +1,19 @@
-from pathlib import Path
-
 import numpy as np
 from austen import Logger
 from skimage import morphology
 from skimage.color import rgb2gray
 from skimage.feature import canny
-from skimage.io import imread
 
-from degas import FluentNumpy
-
-IMAGE = Path('./degas/test/coffee.png')
-LOGS = Path('./logs/')
+from degas import FluentImage
 
 
-def test_fluent():
-    src = imread(str(IMAGE))
+def test_smoke(coffee: np.ndarray):
 
-    logs_dir = LOGS.joinpath(test_fluent.__name__)
+    with FluentImage(coffee) as coffee_fluent:
 
-    with Logger(logs_dir) as logger:
-        with FluentNumpy(src, logger) as src_fluent:
+        assert np.array_equal(coffee_fluent.image, coffee)
 
-            src_fluent >> (
+        coffee_fluent >> (
                 rgb2gray
             ) >> (
                 canny,
@@ -32,46 +24,43 @@ def test_fluent():
                 morphology.binary_dilation
             )
 
-            assert src_fluent.image.shape == src.shape[:-1]
-            assert not np.all(src_fluent.image == 0)
+        assert coffee_fluent.image.shape == coffee.shape[:-1]
+        assert not np.all(coffee_fluent.image == 0)
 
 
-def test_fluent_2():
-    src = imread(str(IMAGE))
+def test_inter_save(coffee: np.ndarray, logger: Logger):
 
-    logs_dir = LOGS.joinpath(test_fluent_2.__name__)
+    with FluentImage(coffee, logger) as coffee_fluent:
 
-    with Logger(logs_dir) as logger:
-        with FluentNumpy(src, logger, inter_save=False) as src_fluent:
-            src_fluent >> (
-                rgb2gray
-            ) >> (
-                canny,
-                {
-                    'sigma': 3.0
-                }
-            ) >> (
-                morphology.binary_dilation
-            )
+        coffee_fluent >> (
+            rgb2gray
+        ) >> (
+            canny,
+            {
+                'sigma': 3.0
+            }
+        ) >> (
+            morphology.binary_dilation
+        )
 
-            assert src_fluent.image.shape == src.shape[:-1]
-            assert not np.all(src_fluent.image == 0)
+        files = tuple(logger.OUTPUT.iterdir())
+        assert len(files) == 4
 
 
-def test_fluent_3():
-    src = imread(str(IMAGE))
+def test_wo_inter_save(coffee: np.ndarray, logger: Logger):
 
-    with FluentNumpy(src) as src_fluent:
-        src_fluent >> (
-                rgb2gray
-            ) >> (
-                canny,
-                {
-                    'sigma': 3.0
-                }
-            ) >> (
-                morphology.binary_dilation
-            )
+    with FluentImage(coffee, logger, inter_save=False) as coffee_fluent:
 
-        assert src_fluent.image.shape == src.shape[:-1]
-        assert not np.all(src_fluent.image == 0)
+        coffee_fluent >> (
+            rgb2gray
+        ) >> (
+            canny,
+            {
+                'sigma': 3.0
+            }
+        ) >> (
+            morphology.binary_dilation
+        )
+
+        files = tuple(logger.OUTPUT.iterdir())
+        assert len(files) == 0

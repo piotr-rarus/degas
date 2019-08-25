@@ -3,6 +3,12 @@
 Fluent interface for `numpy` arrays. Really comfy for chaining methods from
 computer vision packages i.e. `skimage`, `opencv`.
 
+## Getting started
+
+```shell
+pip install degas
+```
+
 ## Chaining methods - FluentImage
 
 ### Rationale
@@ -46,7 +52,7 @@ As we can't simply define new operator for python, we are overloading existing `
 ### Example
 
 ```py
-from degas import FluentNumpy
+from degas import FluentImage
 from skimage.color import rgb2gray
 from skimage.exposure import equalize_adapthist
 from skimage.feature import canny
@@ -54,7 +60,7 @@ from skimage.transform import rescale
 
 
 def preprocess(src, scale_factor):
-    with FluentNumpy(src) as thresh:
+    with FluentImage(src) as thresh:
         preprocessed >> (
             rgb2gray
         ) >> (
@@ -80,9 +86,3 @@ def preprocess(src, scale_factor):
 We simply pass reference to function, and a dictionary that contains all additional parameters.
 
 Code is much more readable now. `numpy` arrays exist only in narrow scopes, meaning they can be marked immediately for memory sweep. It's also much easier now to change pipeline ordering.
-
-## Getting started
-
-```shell
-pip install degas
-```
