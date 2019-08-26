@@ -26,14 +26,14 @@ setuptools.setup(
     ),
     install_requires=[
         'numpy',
-        'austen'
+        'austen',
         'scikit-image',
     ],
     tests_require=[
         'pytest',
         'pytest-cov',
         'flake8',
-        'pylint'
+        'pylint',
     ],
     classifiers=[
         'Programming Language :: Python :: 3',
