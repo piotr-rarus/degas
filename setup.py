@@ -14,7 +14,7 @@ setuptools.setup(
 
     url='http://msol-git:3000/ai-tools/degas',
     license='MIT',
-    version='0.1.1',
+    version='0.1.2',
 
     long_description=long_description,
     long_description_content_type='text/markdown',
