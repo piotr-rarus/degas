@@ -12,9 +12,9 @@ setuptools.setup(
     author='Piotr Rarus',
     author_email='piotr.rarus@gmail.com',
 
-    url='http://msol-git:3000/ai-tools/degas',
+    url='https://github.com/piotr-rarus/degas',
     license='MIT',
-    version='0.1.2',
+    version='0.1.3',
 
     long_description=long_description,
     long_description_content_type='text/markdown',
