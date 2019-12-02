@@ -33,7 +33,6 @@ setuptools.setup(
         'pytest',
         'pytest-cov',
         'flake8',
-        'pylint',
     ],
     classifiers=[
         'Programming Language :: Python :: 3',

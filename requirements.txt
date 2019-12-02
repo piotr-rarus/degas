@@ -4,4 +4,3 @@ scikit-image
 pytest
 pytest-cov
 flake8
-pylint
